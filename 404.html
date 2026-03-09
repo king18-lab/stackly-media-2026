@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INSTYPE • 404 not found</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,107,43,0.15) 0%, #0a0a0a 70%);
+      z-index: -1;
+      animation: bgPulse 8s infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      0% { opacity: 0.5; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .error-container {
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    /* STACKED CARDS ANIMATION */
+    .card-stack {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .stack-card {
+      position: absolute;
+      width: 280px;
+      height: 320px;
+      background: #121212;
+      border-radius: 40px;
+      border: 2px solid #ff6b2b;
+      box-shadow: 0 25px 40px -10px rgba(255,107,43,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      animation: stackFloat 4s infinite ease-in-out;
+      transform-origin: center bottom;
+      color: white;
+    }
+
+    .stack-card:nth-child(1) {
+      background: #1e1e1e;
+      transform: rotate(-5deg) translateY(20px);
+      animation: stackFloat 4.2s infinite -0.2s;
+      z-index: 1;
+      border-color: #ff6b2b80;
+    }
+    .stack-card:nth-child(2) {
+      background: #1a1a1a;
+      transform: rotate(3deg) translateY(5px) translateX(15px);
+      animation: stackFloat 3.8s infinite -0.5s;
+      z-index: 2;
+      border-color: #ff6b2b;
+    }
+    .stack-card:nth-child(3) {
+      background: #151515;
+      transform: rotate(-2deg) translateY(-5px) translateX(-10px);
+      animation: stackFloat 4.5s infinite -1s;
+      z-index: 3;
+      border-color: #ff6b2b;
+    }
+    .stack-card:nth-child(4) {
+      background: #101010;
+      transform: rotate(1deg) translateY(-15px);
+      animation: stackFloat 5s infinite -1.7s;
+      z-index: 4;
+      border-color: #ff6b2b;
+      box-shadow: 0 35px 60px -10px #ff6b2b;
+    }
+
+    @keyframes stackFloat {
+      0% { transform: rotate(var(--rot, 0deg)) translateY(0) translateX(0); }
+      50% { transform: rotate(var(--rot, 0deg)) translateY(-10px) translateX(5px); }
+      100% { transform: rotate(var(--rot, 0deg)) translateY(0) translateX(0); }
+    }
+
+    .stack-card .big-number {
+      font-size: 5rem;
+      font-weight: 900;
+      color: #ff6b2b;
+      text-shadow: 0 0 20px #ff6b2b;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stack-card .error-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: white;
+    }
+    .stack-card .small-icon {
+      font-size: 2rem;
+      color: #ff6b2b;
+      margin-top: 1rem;
+      opacity: 0.8;
+    }
+
+    .stack-card:last-child .big-number {
+      background: linear-gradient(145deg, #ff6b2b, #ffaa33);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .main-404 {
+      font-size: 8rem;
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 4px #ff6b2b;
+      text-shadow: 0 0 40px #ff6b2b;
+      line-height: 1;
+      margin-top: -1rem;
+      animation: glitch 3s infinite;
+    }
+
+    @keyframes glitch {
+      0%,100% { transform: skew(0deg); opacity: 1; text-shadow: 2px 2px 0 #ff6b2b; }
+      95% { transform: skew(3deg); opacity: 0.9; text-shadow: -2px -2px 0 #ffaa33; }
+      96% { transform: skew(-2deg); }
+    }
+
+    .message {
+      font-size: 1.4rem;
+      color: white;
+      margin: 1.5rem 0 2rem;
+      background: rgba(255,107,43,0.1);
+      backdrop-filter: blur(8px);
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      border: 1px solid #ff6b2b;
+      display: inline-block;
+      animation: pulseMessage 2s infinite;
+    }
+
+    @keyframes pulseMessage {
+      0% { box-shadow: 0 0 10px #ff6b2b; }
+      50% { box-shadow: 0 0 30px #ff6b2b; }
+      100% { box-shadow: 0 0 10px #ff6b2b; }
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #ff6b2b;
+      color: #0a0a0a;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      border: 2px solid white;
+      transition: 0.3s;
+      box-shadow: 0 10px 20px -5px #ff6b2b;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    .home-link:hover {
+      background: white;
+      color: #ff6b2b;
+      border-color: #ff6b2b;
+      transform: scale(1.05) translateY(-5px);
+      box-shadow: 0 20px 30px -5px #ff6b2b;
+    }
+
+    .back-link {
+      margin-top: 2rem;
+      color: #666;
+    }
+    .back-link a {
+      color: #ff6b2b;
+      text-decoration: none;
+    }
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      .stack-card {
+        width: 240px;
+        height: 280px;
+      }
+      .card-stack {
+        height: 320px;
+      }
+      .main-404 {
+        font-size: 6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    
+    <!-- STACKED CARDS ANIMATION -->
+    <div class="card-stack">
+      <div class="stack-card">
+        <div class="big-number">4</div>
+        <div class="error-text">LOST</div>
+        <div class="small-icon"><i class="fas fa-compass"></i></div>
+      </div>
+      <div class="stack-card">
+        <div class="big-number">0</div>
+        <div class="error-text">VOID</div>
+        <div class="small-icon"><i class="fas fa-circle"></i></div>
+      </div>
+      <div class="stack-card">
+        <div class="big-number">4</div>
+        <div class="error-text">GHOST</div>
+        <div class="small-icon"><i class="fas fa-ghost"></i></div>
+      </div>
+      <div class="stack-card">
+        <div class="big-number">404</div>
+        <div class="error-text">STACKLY</div>
+        <div class="small-icon"><i class="fas fa-camera-retro"></i></div>
+      </div>
+    </div>
+
+    <!-- main 404 text -->
+    <div class="main-404">404</div>
+    
+    <div class="message">
+      <i class="fas fa-map-pin" style="color:#ff6b2b; margin-right:8px;"></i>
+      this page doesn't exist · but the orange stays
+    </div>
+
+    <!-- Link back to profile -->
+    <a href="index.html" class="home-link">
+      <i class="fas fa-arrow-left"></i> back to profile
+    </a>
+
+    <div class="back-link">
+      
+    </div>
+  </div>
+</body>
+</html>
