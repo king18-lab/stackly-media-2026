@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Stackly • navbar with home dropdown (desktop + mobile)</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* ----- NAVBAR (with dropdown) ----- */
+    .navbar {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: #000;
+      border-bottom: 1px solid #262626;
+      padding: 0.5rem 1rem;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* logo image */
+    .logo a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .logo-img {
+      height: auto;
+      width: 120px;
+      display: block;
+    }
+
+    /* desktop navigation */
+    .nav-links {
+      display: flex;
+      gap: 0.8rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links li a, .nav-links .dropdown-trigger {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      color: #f5f5f5;
+      font-weight: 500;
+      border-radius: 30px;
+      transition: 0.2s;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .nav-links li a i, .nav-links .dropdown-trigger i {
+      font-size: 1.3rem;
+      color: #ff7a00;
+    }
+
+    .nav-links li a:hover, .nav-links .dropdown-trigger:hover {
+      background: #1a1a1a;
+      color: #ff7a00;
+    }
+
+    .nav-links li.active > a, .nav-links li.active > .dropdown-trigger {
+      background: #ff7a00;
+      color: #000;
+    }
+    .nav-links li.active i {
+      color: #000;
+    }
+
+    /* desktop dropdown menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      background: #1a1a1a;
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 0.5rem 0;
+      min-width: 200px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      z-index: 1001;
+    }
+
+    .dropdown-menu.show {
+      display: flex;
+    }
+
+    .dropdown-menu a {
+      padding: 0.8rem 1.5rem;
+      text-decoration: none;
+      color: #f0f0f0;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dropdown-menu a i {
+      color: #ff7a00;
+      width: 24px;
+      font-size: 1.1rem;
+    }
+
+    .dropdown-menu a:hover {
+      background: #333;
+      color: #ff7a00;
+    }
+
+    /* right actions */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .search-btn, .heart-btn {
+      background: transparent;
+      font-size: 1.4rem;
+      color: #f5f5f5;
+      padding: 0.5rem;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .search-btn:hover, .heart-btn:hover {
+      background: #1a1a1a;
+      color: #ff7a00;
+    }
+
+    .profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1a1a1a;
+      padding: 0.4rem 1rem 0.4rem 0.6rem;
+      border-radius: 40px;
+      text-decoration: none;
+      color: white;
+      border: 1px solid #262626;
+    }
+    .profile-badge img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #ff7a00;
+    }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 10px;
+    }
+    .hamburger span {
+      width: 26px;
+      height: 2px;
+      background: #ff7a00;
+      border-radius: 4px;
+    }
+
+    /* mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100vh;
+      background: #000;
+      z-index: 2000;
+      transition: left 0.3s ease;
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+      border-right: 1px solid #262626;
+    }
+
+    .mobile-menu.active {
+      left: 0;
+    }
+
+    .mobile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .mobile-logo-img {
+        width: 100px;
+      height: auto;
+    }
+
+    .close-mobile {
+      font-size: 2rem;
+      cursor: pointer;
+      color: #ff7a00;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-links {
+      list-style: none;
+    }
+
+    .mobile-links li {
+      margin: 0.8rem 0;
+    }
+
+    .mobile-links li a, .mobile-dropdown-trigger {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: white;
+      font-size: 1.3rem;
+      padding: 0.8rem 1rem;
+      border-radius: 40px;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .mobile-links li i {
+      color: #ff7a00;
+      width: 32px;
+      font-size: 1.5rem;
+    }
+
+    .mobile-links li a:active, .mobile-dropdown-trigger:active {
+      background: #1a1a1a;
+    }
+
+    /* mobile submenu (dropdown) */
+    .mobile-submenu {
+      display: none;
+      margin-left: 3rem;
+      margin-top: 0.5rem;
+      border-left: 2px solid #ff7a00;
+      padding-left: 1rem;
+    }
+
+    .mobile-submenu.show {
+      display: block;
+    }
+
+    .mobile-submenu a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.7rem 1rem;
+      font-size: 1.1rem;
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    .mobile-submenu a i {
+      font-size: 1.2rem;
+      width: 28px;
+    }
+
+    .mobile-profile {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #262626;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .mobile-profile img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid #ff7a00;
+    }
+
+    /* overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1500;
+      display: none;
+    }
+    .overlay.active {
+      display: block;
+    }
+
+    /* responsive */
+    @media (max-width: 860px) {
+      .nav-links, .nav-actions .search-btn, .nav-actions .heart-btn, .profile-badge {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 861px) {
+      .mobile-menu, .overlay {
+        display: none;
+      }
+    }
+
+    /* spacer */
+    .spacer {
+      height: 200vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8e8e8e;
+      font-size: 2rem;
+      flex-direction: column;
+      gap: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR with HOME DROPDOWN (desktop + mobile) -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <!-- logo image -->
+      <div class="logo">
+        <a href="404.html">
+          <img class="logo-img" src="stacklylogo (1).webp" alt="Stackly">
+        </a>
+      </div>
+
+      <!-- desktop menu (with dropdown) -->
+      <ul class="nav-links">
+        <!-- HOME with dropdown (desktop) -->
+        <li class="dropdown">
+          <button class="dropdown-trigger" id="desktopHomeDropdown">
+            <i class="fas fa-home"></i> Home <i class="fas fa-chevron-down" style="font-size:0.8rem;"></i>
+          </button>
+          <div class="dropdown-menu" id="desktopHomeMenu">
+            <a href="index.html"><i class="fas fa-newspaper"></i> Home1</a>
+          <a href="home.html"><i class="fas fa-store"></i> Home2</a>
+         
+          </div>
+        </li>
+        <li><a href="account.html"><i class="fas fa-compass"></i> Accounts</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-film"></i> Dashboard</a></li>
+      <li><a href="chat.html"><i class="fas fa-shopping-bag"></i> Chats</a></li>
+      <li><a href="about.html"><i class="fas fa-heart"></i> About</a></li>
+      <li><a href="login.html"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+
+      <!-- right icons -->
+      <div class="nav-actions">
+        <a href="404.html" class="search-btn"><i class="fas fa-search"></i></a>
+        <a href="404.html" class="heart-btn"><i class="fas fa-heart"></i></a>
+        <a href="404.html" class="profile-badge">
+          <img src="stacklylogo (1).webp" alt="profile">
+          <span>Stackly</span>
+        </a>
+      </div>
+
+      <!-- hamburger -->
+      <div class="hamburger" id="hamburgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- overlay & mobile menu -->
+  <div class="overlay" id="overlay"></div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-header">
+      <img class="mobile-logo-img" src="stacklylogo (1).webp" alt="Stackly">
+      <span class="close-mobile" id="closeMobile"><i class="fas fa-times"></i></span>
+    </div>
+
+    <ul class="mobile-links">
+      <!-- HOME with dropdown (mobile) -->
+      <li>
+        <button class="mobile-dropdown-trigger" id="mobileHomeTrigger">
+          <i class="fas fa-home"></i> Home <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
+        </button>
+        <div class="mobile-submenu" id="mobileHomeSubmenu">
+          <a href="index.html"><i class="fas fa-newspaper"></i> Home1</a>
+          <a href="home.html"><i class="fas fa-store"></i> Home2</a>
+         
+        </div>
+      </li>
+      <li><a href="account.html"><i class="fas fa-compass"></i> Accounts</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-film"></i> Dashboard</a></li>
+      <li><a href="chat.html"><i class="fas fa-shopping-bag"></i> Chats</a></li>
+      <li><a href="about.html"><i class="fas fa-heart"></i> About</a></li>
+      <li><a href="login.html"><i class="fas fa-user"></i> Login</a></li>
+    </ul>
+
+    
+    </div>
+  </div>
+
+
+
+  <script>
+    (function() {
+      // ----- DESKTOP DROPDOWN -----
+      const desktopTrigger = document.getElementById('desktopHomeDropdown');
+      const desktopMenu = document.getElementById('desktopHomeMenu');
+
+      if (desktopTrigger && desktopMenu) {
+        desktopTrigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          desktopMenu.classList.toggle('show');
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!desktopTrigger.contains(e.target) && !desktopMenu.contains(e.target)) {
+            desktopMenu.classList.remove('show');
+          }
+        });
+      }
+
+      // ----- MOBILE DROPDOWN (HOME submenu) -----
+      const mobileTrigger = document.getElementById('mobileHomeTrigger');
+      const mobileSubmenu = document.getElementById('mobileHomeSubmenu');
+
+      if (mobileTrigger && mobileSubmenu) {
+        mobileTrigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          mobileSubmenu.classList.toggle('show');
+          // rotate chevron (optional)
+          const chevron = this.querySelector('.fa-chevron-down');
+          if (chevron) chevron.style.transform = mobileSubmenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0)';
+        });
+      }
+
+      // ----- MOBILE MENU OPEN/CLOSE -----
+      const hamburger = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMobile = document.getElementById('closeMobile');
+      const overlay = document.getElementById('overlay');
+
+      function openMobile() {
+        mobileMenu.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        // close any open submenus when closing main menu
+        if (mobileSubmenu) mobileSubmenu.classList.remove('show');
+      }
+
+      hamburger.addEventListener('click', openMobile);
+      closeMobile.addEventListener('click', closeMobileMenu);
+      overlay.addEventListener('click', closeMobileMenu);
+
+      // close mobile menu when clicking any link (except dropdown trigger)
+      document.querySelectorAll('.mobile-links a').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+      });
+
+      // escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (mobileMenu.classList.contains('active')) closeMobileMenu();
+          if (desktopMenu) desktopMenu.classList.remove('show');
+        }
+      });
+
+      // resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 860 && mobileMenu.classList.contains('active')) {
+          closeMobileMenu();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+
+<!-- CONTACT HERO SECTION - MOBILE OPTIMIZED -->
+<section class="contact-hero">
+  <!-- Background Image -->
+  <div class="hero-background">
+    <img src="pavan6.webp" alt="Contact Hero" class="hero-bg">
+    <div class="overlay"></div>
+  </div>
+  
+  <div class="contact-hero-container">
+    <!-- Header Content (Top) -->
+    <div class="hero-header">
+      <div class="hero-badge">
+        <span class="live-dot"></span>
+        <span>GET IN TOUCH</span>
+      </div>
+      
+      <h1 class="hero-title">
+        <span class="gradient-text">Contact</span> Us
+      </h1>
+      
+      <p class="hero-description">
+        Have questions? We'd love to hear from you.
+      </p>
+    </div>
+    
+    <!-- Contact Cards (Middle) -->
+    <div class="contact-cards">
+      <a href="404.html" class="contact-card">
+        <div class="card-icon">
+          <i class="fas fa-phone-alt"></i>
+        </div>
+        <h3>Call Us</h3>
+        <p>+1 (555) 123-4567</p>
+        <span class="card-link">Call now →</span>
+      </a>
+      
+      <a href="404.html" class="contact-card">
+        <div class="card-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h3>Email Us</h3>
+        <p>hello@stackly.com</p>
+        <span class="card-link">Send message →</span>
+      </a>
+      
+      <a href="404.html" class="contact-card">
+        <div class="card-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h3>Visit Us</h3>
+        <p>123 Business St, NY</p>
+        <span class="card-link">Get directions →</span>
+      </a>
+      
+      <a href="404.html" class="contact-card">
+        <div class="card-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3>Working Hours</h3>
+        <p>Mon-Fri: 9AM - 6PM</p>
+        <span class="card-link">Schedule →</span>
+      </a>
+    </div>
+    
+    <!-- Quick Message Form (Bottom) -->
+    <div class="quick-form">
+      <h2>Send Quick Message</h2>
+      
+      <div class="form-row">
+        <a href="404.html" class="form-field">
+          <i class="fas fa-user"></i>
+          <span>Your Name</span>
+        </a>
+        
+        <a href="404.html" class="form-field">
+          <i class="fas fa-envelope"></i>
+          <span>Your Email</span>
+        </a>
+      </div>
+      
+      <a href="404.html" class="form-field message-field">
+        <i class="fas fa-comment"></i>
+        <span>Your Message</span>
+      </a>
+      
+      <a href="404.html" class="send-btn">
+        <i class="fas fa-paper-plane"></i>
+        Send Message
+      </a>
+    </div>
+    
+    <!-- Social Links -->
+    <div class="social-links">
+      <a href="404.html" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+      <a href="404.html" class="social-icon"><i class="fab fa-twitter"></i></a>
+      <a href="404.html" class="social-icon"><i class="fab fa-instagram"></i></a>
+      <a href="404.html" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+      <a href="404.html" class="social-icon"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+  
+  <!-- Scroll Indicator -->
+  <a href="404.html" class="scroll-down">
+    <div class="scroll-arrow">↓</div>
+  </a>
+</section>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.contact-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Background */
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 100%);
+  z-index: 1;
+}
+
+/* Container */
+.contact-hero-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Header */
+.hero-header {
+  text-align: center;
+  animation: fadeInUp 0.8s ease;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,107,43,0.2);
+  backdrop-filter: blur(10px);
+  padding: 8px 20px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,107,43,0.3);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff6b2b;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,107,43,0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255,107,43,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,107,43,0); }
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 15px;
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #ff6b2b, #ff8e53);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  opacity: 0.9;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Contact Cards */
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.contact-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,107,43,0.2);
+  border-radius: 20px;
+  padding: 20px 12px;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  background: rgba(255,107,43,0.15);
+  border-color: #ff6b2b;
+  transform: translateY(-3px);
+}
+
+.card-icon {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(45deg, #ff6b2b, #ff8e53);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.contact-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.contact-card p {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+
+.card-link {
+  font-size: 0.75rem;
+  color: #ff6b2b;
+  font-weight: 500;
+}
+
+/* Quick Form */
+.quick-form {
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,107,43,0.3);
+  border-radius: 25px;
+  padding: 25px 20px;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+.quick-form h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  background: linear-gradient(45deg, #fff, #ffd93d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-field {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,107,43,0.2);
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.form-field:hover {
+  background: rgba(255,107,43,0.1);
+  border-color: #ff6b2b;
+}
+
+.form-field i {
+  color: #ff6b2b;
+  font-size: 1rem;
+}
+
+.form-field span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.message-field {
+  margin-bottom: 15px;
+}
+
+.send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(45deg, #ff6b2b, #ff8e53);
+  color: white;
+  text-decoration: none;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.send-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255,107,43,0.4);
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  animation: fadeInUp 0.8s ease 0.6s both;
+  flex-wrap: wrap;
+}
+
+.social-icon {
+  width: 45px;
+  height: 45px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border: 1px solid rgba(255,107,43,0.3);
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: linear-gradient(45deg, #ff6b2b, #ff8e53);
+  transform: translateY(-3px) rotate(8deg);
+}
+
+/* Scroll Indicator */
+.scroll-down {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: white;
+  text-decoration: none;
+  animation: bounce 2s infinite;
+}
+
+.scroll-arrow {
+  width: 35px;
+  height: 35px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.scroll-down:hover .scroll-arrow {
+  border-color: #ff6b2b;
+  background: #ff6b2b;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* ===== MOBILE FIRST (already optimized for mobile) ===== */
+/* This section is designed for mobile first! */
+
+/* Small phones (320px - 375px) */
+@media (max-width: 375px) {
+  .contact-hero-container {
+    padding: 20px 15px;
+    gap: 25px;
+  }
+  
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  
+  .contact-cards {
+    gap: 8px;
+  }
+  
+  .contact-card {
+    padding: 15px 8px;
+  }
+  
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .contact-card h3 {
+    font-size: 0.9rem;
+  }
+  
+  .contact-card p {
+    font-size: 0.75rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .quick-form h2 {
+    font-size: 1.3rem;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .scroll-down {
+    bottom: 10px;
+  }
+  
+  .scroll-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+}
+
+/* Tablets (768px and above) */
+@media (min-width: 768px) {
+  .contact-hero-container {
+    padding: 40px;
+    gap: 50px;
+  }
+  
+  .hero-header {
+    margin-bottom: 10px;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.2rem;
+    max-width: 500px;
+  }
+  
+  .contact-cards {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .contact-card {
+    padding: 25px 15px;
+  }
+  
+  .card-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 1.5rem;
+  }
+  
+  .contact-card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .contact-card p {
+    font-size: 0.95rem;
+  }
+  
+  .card-link {
+    font-size: 0.85rem;
+  }
+  
+  .quick-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 35px;
+  }
+  
+  .quick-form h2 {
+    font-size: 2rem;
+  }
+  
+  .form-field {
+    padding: 18px;
+  }
+  
+  .form-field i {
+    font-size: 1.2rem;
+  }
+  
+  .form-field span {
+    font-size: 1rem;
+  }
+  
+  .send-btn {
+    padding: 18px;
+    font-size: 1.1rem;
+  }
+  
+  .social-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+}
+
+/* Desktop (1024px and above) */
+@media (min-width: 1024px) {
+  .contact-hero-container {
+    max-width: 1200px;
+    gap: 60px;
+  }
+  
+  .hero-title {
+    font-size: 4.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.3rem;
+    max-width: 600px;
+  }
+  
+  .contact-cards {
+    gap: 25px;
+  }
+  
+  .contact-card {
+    padding: 30px 20px;
+  }
+  
+  .quick-form {
+    max-width: 700px;
+  }
+}
+
+/* Large Desktop (1400px and above) */
+@media (min-width: 1400px) {
+  .hero-title {
+    font-size: 5rem;
+  }
+  
+  .contact-card {
+    padding: 35px 25px;
+  }
+}
+</style>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- ScrollReveal (for smooth entrance) -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    /* main chat container (whatsapp/instagram style) */
+    .chat-container {
+      width: 100%;
+      max-width: 1400px;
+      height: 90vh;
+      background: #121212;
+      border-radius: 40px;
+      border: 2px solid #ff6b2b;
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 30px 60px -15px rgba(255,107,43,0.4);
+    }
+
+    /* ===== SIDEBAR (contact list) ===== */
+    .sidebar {
+      width: 35%;
+      background: #0f0f0f;
+      border-right: 2px solid #2a2a2a;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 1.2rem;
+      background: #1a1a1a;
+      border-bottom: 2px solid #ff6b2b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-header h2 {
+      color: white;
+      font-size: 1.5rem;
+    }
+    .sidebar-header h2 i {
+      color: #ff6b2b;
+      margin-right: 8px;
+    }
+    .new-chat-btn {
+      background: #ff6b2b;
+      color: #0a0a0a;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .new-chat-btn:hover {
+      background: white;
+      color: #ff6b2b;
+      border-color: #ff6b2b;
+    }
+
+    .search-box {
+      padding: 1rem 1rem 0.5rem;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 40px;
+      border: none;
+      background: #2a2a2a;
+      color: white;
+      font-size: 0.95rem;
+      border: 1px solid #444;
+    }
+    .search-box input::placeholder {
+      color: #888;
+    }
+
+    .contact-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0.5rem 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.8rem 1rem;
+      border-radius: 30px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: 0.2s;
+      background: transparent;
+    }
+    .contact-item:hover {
+      background: #2a2a2a;
+    }
+    .contact-item.active {
+      background: #ff6b2b20;
+      border: 1px solid #ff6b2b;
+    }
+
+    .contact-avatar {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ff6b2b, #ffaa33);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #0a0a0a;
+      position: relative;
+    }
+    .contact-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0a0a0a;
+    }
+    .online-badge {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      width: 14px;
+      height: 14px;
+      background: #4caf50;
+      border-radius: 50%;
+      border: 2px solid #0a0a0a;
+    }
+
+    .contact-info {
+      flex: 1;
+    }
+    .contact-name {
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .contact-name i {
+      color: #ff6b2b;
+      font-size: 0.9rem;
+    }
+    .last-message {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+    }
+    .message-time {
+      font-size: 0.7rem;
+      color: #777;
+      align-self: flex-start;
+    }
+
+    /* ===== CHAT AREA ===== */
+    .chat-area {
+      width: 65%;
+      display: flex;
+      flex-direction: column;
+      background: #0f0f0f;
+    }
+
+    .chat-header {
+      padding: 1.2rem 1.5rem;
+      background: #1a1a1a;
+      border-bottom: 2px solid #ff6b2b;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .chat-header-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ff6b2b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .chat-header-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .chat-header-info h3 {
+      color: white;
+      font-size: 1.3rem;
+    }
+    .chat-header-info p {
+      color: #4caf50;
+      font-size: 0.8rem;
+    }
+    .chat-header-icons {
+      margin-left: auto;
+      display: flex;
+      gap: 1.2rem;
+    }
+    .chat-header-icons a {
+      color: #ff6b2b;
+      font-size: 1.3rem;
+      text-decoration: none;
+    }
+
+    /* messages container */
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #0c0c0c;
+    }
+
+    /* message bubbles */
+    .message {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      max-width: 70%;
+    }
+    .message.received {
+      align-self: flex-start;
+    }
+    .message.sent {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #ff6b2b;
+      flex-shrink: 0;
+    }
+    .message-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .message-bubble {
+      background: #2a2a2a;
+      padding: 0.8rem 1.2rem;
+      border-radius: 22px;
+      color: white;
+      font-size: 0.95rem;
+      position: relative;
+      word-wrap: break-word;
+    }
+    .message.sent .message-bubble {
+      background: #ff6b2b;
+      color: #0a0a0a;
+      font-weight: 500;
+    }
+
+    .message-time-small {
+      font-size: 0.6rem;
+      color: #888;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    /* attachments (photo/doc/video) */
+    .attachment-preview {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .attachment-item {
+      background: #1f1f1f;
+      border-radius: 15px;
+      padding: 0.4rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      border: 1px solid #ff6b2b;
+      color: #ddd;
+      text-decoration: none;
+    }
+    .attachment-item i {
+      color: #ff6b2b;
+    }
+
+    /* input area */
+    .message-input {
+      padding: 1.2rem 1.5rem;
+      background: #1a1a1a;
+      border-top: 2px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .message-input input {
+      flex: 1;
+      background: #2a2a2a;
+      border: none;
+      padding: 1rem 1.5rem;
+      border-radius: 40px;
+      color: white;
+      font-size: 0.95rem;
+      border: 1px solid #444;
+    }
+    .message-input input::placeholder {
+      color: #777;
+    }
+    .input-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    .input-actions a {
+      color: #ff6b2b;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+
+    
+    /* scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff6b2b;
+      border-radius: 10px;
+    }
+
+    /* responsive */
+    @media (max-width: 800px) {
+      .chat-container {
+        flex-direction: column;
+        height: 95vh;
+      }
+      .sidebar {
+        width: 100%;
+        height: 40%;
+        border-right: none;
+        border-bottom: 2px solid #ff6b2b;
+      }
+      .chat-area {
+        width: 100%;
+        height: 60%;
+      }
+      .contact-list {
+        display: flex;
+        overflow-x: auto;
+        padding: 0.5rem;
+      }
+      .contact-item {
+        flex-direction: column;
+        min-width: 100px;
+        text-align: center;
+        padding: 0.5rem;
+      }
+      .last-message {
+        display: none;
+      }
+      .message-time {
+        display: none;
+      }
+    }
+
+    /* scroll reveal */
+    [data-sr] {
+      visibility: visible;
+    }
+
+    /* welcome message styling */
+    .welcome-message {
+      text-align: center;
+      color: #aaa;
+      padding: 2rem;
+      font-style: italic;
+      background: #1a1a1a;
+      border-radius: 30px;
+      margin: 1rem;
+    }
+    .welcome-message i {
+      color: #ff6b2b;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN CHAT CONTAINER (whatsapp/instagram style) -->
+  <div class="chat-container" data-sr>
+
+    <!-- SIDEBAR: 20 CONTACTS -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fab fa-whatsapp"></i> STACKLY Chat</h2>
+        <div class="new-chat-btn" onclick="window.location.href='404.html'">
+          <i class="fas fa-plus"></i>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Search or start new chat..." onclick="window.location.href='404.html'">
+      </div>
+
+      <div class="contact-list" id="contactList">
+        <!-- 20 contacts will be generated via JS -->
+      </div>
+    </div>
+
+    <!-- CHAT AREA (active chat) -->
+    <div class="chat-area" id="chatArea">
+      <div class="chat-header">
+        <div class="chat-header-avatar">
+          <img src="hr4.webp" alt="avatar" id="activeAvatar">
+        </div>
+        <div class="chat-header-info">
+          <h3 id="activeName">Kiara Sharma</h3>
+          <p><i class="fas fa-circle" style="color:#4caf50; font-size: 0.5rem;"></i> online</p>
+        </div>
+        <div class="chat-header-icons">
+          <a href="404.html"><i class="fas fa-phone-alt"></i></a>
+          <a href="404.html"><i class="fas fa-video"></i></a>
+          <a href="404.html"><i class="fas fa-ellipsis-v"></i></a>
+        </div>
+      </div>
+
+      <!-- MESSAGES CONTAINER -->
+      <div class="messages-container" id="messagesContainer">
+        <!-- Welcome message -->
+        <div class="welcome-message">
+          <i class="fas fa-hand-peace"></i>
+          <p>👋 Welcome to STACKLY social!<br>Say hi to start chatting.<br><span style="color:#ff6b2b;"></span></p>
+        </div>
+
+        <!-- Example messages -->
+        <div class="message received">
+          <div class="message-avatar"><img src="hr27.webp" alt=""></div>
+          <div class="message-bubble">
+            Hey! How's it going? 🔥
+            <div class="message-time-small">10:42 AM</div>
+          </div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-bubble">
+            All good! Ready to collaborate?
+            <div class="attachment-preview">
+              <a href="404.html" class="attachment-item"><i class="fas fa-image"></i> photo.jpg</a>
+              <a href="404.html" class="attachment-item"><i class="fas fa-file-pdf"></i> doc.pdf</a>
+            </div>
+            <div class="message-time-small">10:43 AM</div>
+          </div>
+        </div>
+
+        <div class="message received">
+          <div class="message-avatar"><img src="hr25.webp" alt=""></div>
+          <div class="message-bubble">
+            <i class="fas fa-video" style="color:#ff6b2b;"></i> Sent a video
+            <div class="attachment-preview">
+              <a href="404.html" class="attachment-item"><i class="fas fa-video"></i> preview.mp4</a>
+            </div>
+            <div class="message-time-small">10:45 AM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESSAGE INPUT -->
+      <div class="message-input">
+        <input type="text" placeholder="Type a message..." onclick="window.location.href='404.html'">
+        <div class="input-actions">
+          <a href="404.html"><i class="fas fa-paperclip"></i></a>
+          <a href="404.html"><i class="fas fa-camera"></i></a>
+          <a href="404.html"><i class="fas fa-microphone"></i></a>
+          <a href="404.html"><i class="fas fa-paper-plane"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Contact data with individual photos
+    const contacts = [
+      { name: "Kiara Sharma", photo: "Hr.webp", lastMsg: "Hey! How are you?", time: "10:42 AM" },
+      { name: "Rahul Mehta", photo: "hr1.webp", lastMsg: "Check out this reel 🔥", time: "9:30 AM" },
+      { name: "Priya Kapoor", photo: "hr2.webp", lastMsg: "Sent a photo", time: "Yesterday" },
+      { name: "Arjun Singh", photo: "hr3.webp", lastMsg: "😄😂", time: "Yesterday" },
+      { name: "Ananya Das", photo: "hr4.webp", lastMsg: "Video call missed", time: "2:15 PM" },
+      { name: "Vikram Raj", photo: "hr6.webp", lastMsg: "On my way!", time: "1:20 PM" },
+      { name: "Neha Gupta", photo: "hr11.webp", lastMsg: "Let's meet tomorrow", time: "11:05 AM" },
+      { name: "Rohan Khanna", photo: "hr12.webp", lastMsg: "Did you see the post?", time: "8:45 AM" },
+      { name: "Isha Verma", photo: "hr13.webp", lastMsg: "👍👍", time: "Yesterday" },
+      { name: "Akash Patel", photo: "hr21.webp", lastMsg: "Haha true", time: "3:30 PM" },
+      { name: "Sneha Reddy", photo: "hr22.webp", lastMsg: "Cool", time: "12:10 PM" },
+      { name: "Manish Yadav", photo: "hr23.webp", lastMsg: "I'll send it now", time: "10:15 AM" },
+      { name: "Pooja Malhotra", photo: "hr24.webp", lastMsg: "What's up?", time: "9:50 AM" },
+      { name: "Karan Wahi", photo: "hr25.webp", lastMsg: "Good morning!", time: "8:00 AM" },
+      { name: "Divya Nair", photo: "hr26.webp", lastMsg: "✨✨", time: "Yesterday" },
+      { name: "Ajay Kumar", photo: "hr27.webp", lastMsg: "Attachment: doc.pdf", time: "4:20 PM" },
+      { name: "Simran Kaur", photo: "hr28.webp", lastMsg: "🔥🔥", time: "2:45 PM" },
+      { name: "Nikhil Choudhary", photo: "hrwomen.webp", lastMsg: "Hello?", time: "1:10 PM" },
+      { name: "Tanya Joseph", photo: "hr4.webp", lastMsg: "Thanks!", time: "11:30 AM" },
+      { name: "Aryan Thakur", photo: "hr13.webp", lastMsg: "👍", time: "10:05 AM" }
+    ];
+
+    const contactList = document.getElementById('contactList');
+    let contactHtml = '';
+
+    contacts.forEach((contact, index) => {
+      contactHtml += `
+        <div class="contact-item ${index === 0 ? 'active' : ''}" onclick="openChat('${contact.name}', ${index}, '${contact.photo}')">
+          <div class="contact-avatar">
+            <img src="${contact.photo}" alt="${contact.name}">
+            <span class="online-badge"></span>
+          </div>
+          <div class="contact-info">
+            <div class="contact-name">${contact.name} <i class="fas fa-check-circle"></i></div>
+            <div class="last-message">${contact.lastMsg}</div>
+          </div>
+          <div class="message-time">${contact.time}</div>
+        </div>
+      `;
+    });
+    
+    contactList.innerHTML = contactHtml;
+
+    // Function to open chat and update messages
+    function openChat(name, index, photo) {
+      // Update active class
+      document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      // Update chat header
+      document.getElementById('activeName').innerText = name;
+      document.getElementById('activeAvatar').src = photo;
+
+      // Generate new messages for this chat
+      const messagesContainer = document.getElementById('messagesContainer');
+      
+      const greetings = [
+        `Hey! Welcome to STACKLY 👋`,
+        `How's it going? 🔥`,
+        `Nice to see you!`,
+        `Ready to collaborate?`,
+        `Yo! What's up?`
+      ];
+      const randomGreet = greetings[Math.floor(Math.random() * greetings.length)];
+
+      messagesContainer.innerHTML = `
+        <div class="message received">
+          <div class="message-avatar"><img src="${photo}" alt=""></div>
+          <div class="message-bubble">
+            ${randomGreet}
+            <div class="message-time-small">${new Date().getHours()}:${new Date().getMinutes()} AM</div>
+          </div>
+        </div>
+
+        <div class="message sent">
+          <div class="message-bubble">
+            Hi! Everything's great. Check this out 👇
+            <div class="attachment-preview">
+              <a href="404.html" class="attachment-item"><i class="fas fa-image"></i> insta_post.webp</a>
+              <a href="404.html" class="attachment-item"><i class="fas fa-file"></i> doc.pdf</a>
+              <a href="404.html" class="attachment-item"><i class="fas fa-video"></i> reel.mp4</a>
+            </div>
+            <div class="message-time-small">just now</div>
+          </div>
+        </div>
+
+        <div class="message received">
+          <div class="message-avatar"><img src="${photo}" alt=""></div>
+          <div class="message-bubble">
+            <i class="fas fa-smile" style="color:#ff6b2b;"></i> Love it! Sending you something back
+            <div class="attachment-preview">
+              <a href="404.html" class="attachment-item"><i class="fas fa-video"></i> video_reply.mp4</a>
+            </div>
+            <div class="message-time-small">just now</div>
+          </div>
+        </div>
+
+        <div class="welcome-message" style="margin-top: 1rem;">
+          <i class="fas fa-hand-peace"></i>
+          <p>All messages, attachments, and inputs link to <strong style="color:#ff6b2b;">404.html</strong><br>Click anything to explore the 404 page.</p>
+        </div>
+      `;
+    }
+
+    // Make input field lead to 404
+    document.querySelector('.message-input input').addEventListener('click', function() {
+      window.location.href = '404.html';
+    });
+
+    // ScrollReveal
+    window.addEventListener('load', function() {
+      if (typeof ScrollReveal !== 'undefined') {
+        ScrollReveal().reveal('[data-sr]', {
+          distance: '20px',
+          duration: 600,
+          origin: 'bottom',
+          mobile: true
+        });
+      }
+    });
+  </script>
+
+  <!-- Small note -->
+  <div style="position: fixed; bottom: 10px; left: 0; width: 100%; text-align: center; color: #555; font-size: 0.7rem; pointer-events: none;">
+    <i class="fas fa-link" style="color:#ff6b2b;"></i> 
+  </div>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- ScrollReveal -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+</body>
+</html>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    /* section titles */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+      margin-top: 70px;
+    }
+    .section-title span {
+      color: #ff6b2b;
+      border-bottom: 4px solid #ff6b2b;
+      padding-bottom: 8px;
+    }
+    .section-title i {
+      color: #ff6b2b;
+      margin: 0 10px;
+    }
+
+    /* ===== FAQ SECTION (NO 404 LINK) ===== */
+    .faq-section {
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto 5rem;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .faq-item {
+      background: #121212;
+      border: 1px solid #2c2c2c;
+      border-radius: 30px;
+      padding: 1.5rem 1.8rem;
+      transition: 0.25s ease;
+      cursor: pointer;
+      box-shadow: 0 15px 30px -15px rgba(255,107,43,0.2);
+    }
+    .faq-item:hover {
+      border-color: #ff6b2b;
+      transform: translateY(-5px);
+      box-shadow: 0 25px 40px -15px #ff6b2b;
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      pointer-events: none; /* ensures click on whole item works */
+    }
+    .faq-question i {
+      color: #ff6b2b;
+      font-size: 1.5rem;
+      width: 30px;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      color: #aaa;
+      line-height: 1.6;
+      margin-top: 0;
+      padding-left: 3.5rem;
+    }
+    .faq-item.expanded .faq-answer {
+      max-height: 200px;
+      margin-top: 1rem;
+    }
+    .faq-answer i {
+      color: #ff6b2b;
+      margin-right: 8px;
+    }
+
+    /* ===== TESTIMONIAL SECTION (WITH 404 LINK) ===== */
+    .testimonial-section {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: #121212;
+      border: 1px solid #2c2c2c;
+      border-radius: 35px;
+      padding: 2rem 1.8rem;
+      transition: 0.25s ease;
+      box-shadow: 0 20px 35px -15px rgba(255,107,43,0.15);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .testimonial-card:hover {
+      border-color: #ff6b2b;
+      transform: translateY(-8px);
+      box-shadow: 0 30px 45px -15px #ff6b2b;
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .testimonial-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ff6b2b, #ffaa33);
+      padding: 3px;
+    }
+    .testimonial-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid #0a0a0a;
+      object-fit: cover;
+    }
+    .testimonial-author h4 {
+      color: white;
+      font-size: 1.1rem;
+    }
+    .testimonial-author p {
+      color: #ff6b2b;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .testimonial-text {
+      color: #ccc;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      font-style: italic;
+      margin: 1rem 0 1.2rem;
+      flex: 1;
+    }
+    .testimonial-text i {
+      color: #ff6b2b;
+      opacity: 0.5;
+      margin: 0 5px;
+    }
+
+    .testimonial-rating {
+      color: #ff6b2b;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      margin-top: auto;
+    }
+    .testimonial-date {
+      color: #666;
+      font-size: 0.7rem;
+      margin-top: 0.8rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+      .testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .section-title {
+        font-size: 2rem;
+      }
+      .faq-item {
+        padding: 1.2rem 1.4rem;
+      }
+      .faq-question {
+        font-size: 1rem;
+      }
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+      .testimonial-card {
+        padding: 1.5rem;
+      }
+    }
+
+    /* scroll reveal */
+    [data-sr] {
+      visibility: visible;
+    }
+
+    /* note */
+    .note-404 {
+      margin-top: 3rem;
+      color: #555;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .note-404 i {
+      color: #ff6b2b;
+    }
+    .note-404 span {
+      color: #ff6b2b;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 10 FAQS SECTION (NO 404 LINK - only expand/collapse) -->
+  <section class="faq-section" data-sr>
+    <h2 class="section-title"><i class="fas fa-question-circle"></i> <span>frequently asked</span> <i class="fas fa-question-circle"></i></h2>
+    <p style="text-align: center; color: #ff6b2b; margin-bottom: 1.5rem; font-size: 0.9rem;">
+      <i class="fas fa-hand-pointer"></i>
+    
+    <div class="faq-grid">
+      <!-- FAQ 1 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-camera-retro"></i> How do I create a reel?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Tap the plus icon, select 'Reel', and upload your vertical video. Add effects and music.
+        </div>
+      </div>
+
+      <!-- FAQ 2 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-chart-line"></i> How to grow followers?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Post consistently, use trending hashtags, and engage with your community daily.
+        </div>
+      </div>
+
+      <!-- FAQ 3 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-video"></i> What video format works best?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Vertical 9:16 ratio, MP4 format, under 60 seconds for maximum reach.
+        </div>
+      </div>
+
+      <!-- FAQ 4 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-money-bill-wave"></i> Can I monetize my content?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Yes! Once you hit 10k followers, you can join our creator program.
+        </div>
+      </div>
+
+      <!-- FAQ 5 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-music"></i> How to add copyrighted music?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Use our licensed music library to avoid copyright issues.
+        </div>
+      </div>
+
+      <!-- FAQ 6 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-shield-alt"></i> Is my data safe?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Absolutely. We use end-to-end encryption for all messages and posts.
+        </div>
+      </div>
+
+      <!-- FAQ 7 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-clock"></i> How long do stories last?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Stories disappear after 24 hours, but you can save them to highlights.
+        </div>
+      </div>
+
+      <!-- FAQ 8 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-users"></i> Can I have multiple accounts?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Yes! You can add up to 5 accounts and switch easily.
+        </div>
+      </div>
+
+      <!-- FAQ 9 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-ban"></i> How to block someone?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Go to their profile, tap three dots, and select 'Block'.
+        </div>
+      </div>
+
+      <!-- FAQ 10 -->
+      <div class="faq-item" onclick="toggleFaq(this)" data-expanded="false">
+        <div class="faq-question">
+          <i class="fas fa-download"></i> Can I download my data?
+        </div>
+        <div class="faq-answer">
+          <i class="fas fa-arrow-right"></i> Request your data in settings > privacy > download data.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 TESTIMONIALS SECTION (ALL LINK TO 404.HTML) -->
+  <section class="testimonial-section" data-sr>
+    <h2 class="section-title"><i class="fas fa-star"></i> <span>what creators say</span> <i class="fas fa-star"></i></h2>
+    <p style="text-align: center; color: #ff6b2b; margin-bottom: 1.5rem; font-size: 0.9rem;">
+      <i class="fas fa-external-link-alt"></i> 
+    </p>
+
+    <div class="testimonial-grid">
+      <!-- Testimonial 1 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hr21.webp" alt="Priya">
+          </div>
+          <div class="testimonial-author">
+            <h4>Priya K.</h4>
+            <p>@priyacreates</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> Stackly changed how I connect with my audience. The reel editor is fire! 
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testimonial-date">2 weeks ago</div>
+      </a>
+
+      <!-- Testimonial 2 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hr24.webp" alt="Rahul">
+          </div>
+          <div class="testimonial-author">
+            <h4>Rahul M.</h4>
+            <p>@rahul.vlogs</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> Best platform for creators. The analytics help me grow 10x faster.
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        </div>
+        <div class="testimonial-date">1 month ago</div>
+      </a>
+
+      <!-- Testimonial 3 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hr25.webp" alt="Ananya">
+          </div>
+          <div class="testimonial-author">
+            <h4>Ananya S.</h4>
+            <p>@ananyaa_art</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> The community here is so supportive. Found my best collaborators on INSTYPE.
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testimonial-date">3 weeks ago</div>
+      </a>
+
+      <!-- Testimonial 4 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hr26.webp" alt="Vikram">
+          </div>
+          <div class="testimonial-author">
+            <h4>Vikram R.</h4>
+            <p>@vikram_films</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> Video quality is amazing. No compression issues like other platforms.
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testimonial-date">5 days ago</div>
+      </a>
+
+      <!-- Testimonial 5 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hr27.webp" alt="Neha">
+          </div>
+          <div class="testimonial-author">
+            <h4>Neha G.</h4>
+            <p>@neha.beauty</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> The orange theme is so iconic! My followers love the aesthetic.
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        </div>
+        <div class="testimonial-date">1 week ago</div>
+      </a>
+
+      <!-- Testimonial 6 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hr28.webp" alt="Arjun">
+          </div>
+          <div class="testimonial-author">
+            <h4>Arjun K.</h4>
+            <p>@arjun.music</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> Perfect for musicians. The sound quality is unmatched. 
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testimonial-date">2 months ago</div>
+      </a>
+
+      <!-- Testimonial 7 -->
+      <a href="404.html" class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <img src="hrwomen.webp" alt="Isha">
+          </div>
+          <div class="testimonial-author">
+            <h4>Isha V.</h4>
+            <p>@isha.travels</p>
+          </div>
+        </div>
+        <div class="testimonial-text">
+          <i class="fas fa-quote-left"></i> Travel content looks stunning here. Best decision to join INSTYPE.
+        </div>
+        <div class="testimonial-rating">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testimonial-date">3 months ago</div>
+      </a>
+    </div>
+  </section>
+
+  
+
+  <script>
+    // Toggle FAQ expansion (NO 404 NAVIGATION)
+    function toggleFaq(element) {
+      const expanded = element.getAttribute('data-expanded') === 'true' ? false : true;
+      element.setAttribute('data-expanded', expanded);
+      if (expanded) {
+        element.classList.add('expanded');
+      } else {
+        element.classList.remove('expanded');
+      }
+    }
+
+    // ScrollReveal initialization
+    window.addEventListener('load', function() {
+      ScrollReveal().reveal('[data-sr]', {
+        distance: '30px',
+        duration: 800,
+        easing: 'ease-out',
+        interval: 150,
+        opacity: 0,
+        origin: 'bottom',
+        reset: false,
+        mobile: true
+      });
+
+      // Individual card reveals
+      ScrollReveal().reveal('.faq-item', {
+        distance: '20px',
+        duration: 600,
+        interval: 80,
+        origin: 'bottom',
+        mobile: true
+      });
+
+      ScrollReveal().reveal('.testimonial-card', {
+        distance: '25px',
+        duration: 700,
+        interval: 100,
+        origin: 'bottom',
+        mobile: true
+      });
+    });
+  </script>
+</body>
+</html>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* dummy content to show footer at bottom */
+    .content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      padding: 3rem;
+      text-align: center;
+    }
+    .content span {
+      color: #ff6b2b;
+    }
+
+    /* ===== FOOTER STYLES (INSTYPE PATTERN) ===== */
+    .footer {
+      background: #0f0f0f;
+      border-top: 3px solid #ff6b2b;
+      padding: 3rem 2rem 1.5rem;
+      width: 100%;
+      box-shadow: 0 -20px 40px -15px rgba(255,107,43,0.2);
+    }
+
+    .footer-container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* stacked social pattern (top row) */
+    .footer-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .stack-item {
+      background: #1a1a1a;
+      border: 2px solid #ff6b2b;
+      border-radius: 30px;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 10px 20px -5px #ff6b2b;
+      transform: rotate(var(--rot, 0deg));
+      animation: float 4s infinite ease-in-out;
+    }
+
+    .stack-item:nth-child(1) { --rot: -2deg; animation-delay: 0s; }
+    .stack-item:nth-child(2) { --rot: 3deg; animation-delay: 0.5s; }
+    .stack-item:nth-child(3) { --rot: -1deg; animation-delay: 1s; }
+    .stack-item:nth-child(4) { --rot: 4deg; animation-delay: 1.5s; }
+
+    @keyframes float {
+      0% { transform: rotate(var(--rot)) translateY(0); }
+      50% { transform: rotate(var(--rot)) translateY(-8px); }
+      100% { transform: rotate(var(--rot)) translateY(0); }
+    }
+
+    .stack-item i {
+      font-size: 2rem;
+      color: #ff6b2b;
+    }
+    .stack-item span {
+      font-weight: 600;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    /* main footer grid */
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    /* brand column */
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .footer-brand .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-brand .logo i {
+      font-size: 2.5rem;
+      color: #ff6b2b;
+    }
+    .footer-brand .logo h2 {
+      font-size: 1.8rem;
+      color: white;
+    }
+    .footer-brand .logo h2 span {
+      color: #ff6b2b;
+    }
+    .footer-brand p {
+      color: #aaa;
+      line-height: 1.6;
+      max-width: 300px;
+    }
+    .social-links {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    .social-links a {
+      color: #ff6b2b;
+      background: #1a1a1a;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      border: 1px solid #ff6b2b;
+      transition: 0.2s;
+    }
+    .social-links a:hover {
+      background: #ff6b2b;
+      color: #0a0a0a;
+      transform: translateY(-5px);
+    }
+
+    /* footer columns */
+    .footer-col h3 {
+      color: white;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    .footer-col h3::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: #ff6b2b;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 0.8rem;
+    }
+    .footer-col ul li a {
+      color: #aaa;
+      text-decoration: none;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-col ul li a i {
+      color: #ff6b2b;
+      font-size: 0.8rem;
+    }
+    .footer-col ul li a:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    /* newsletter column */
+    .newsletter p {
+      color: #aaa;
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+    .newsletter-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .newsletter-form input {
+      padding: 1rem 1.2rem;
+      border-radius: 50px;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: white;
+      font-size: 0.95rem;
+    }
+    .newsletter-form input:focus {
+      outline: none;
+      border-color: #ff6b2b;
+    }
+    .newsletter-form button {
+      background: #ff6b2b;
+      color: #0a0a0a;
+      border: none;
+      padding: 1rem;
+      border-radius: 50px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .newsletter-form button:hover {
+      background: white;
+      color: #ff6b2b;
+      border-color: #ff6b2b;
+    }
+
+    /* footer bottom */
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid #2a2a2a;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-bottom-links a {
+      color: #777;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .footer-bottom-links a:hover {
+      color: #ff6b2b;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1000px) {
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .footer-stack {
+        gap: 1rem;
+      }
+      .stack-item {
+        padding: 0.8rem 1.2rem;
+      }
+      .stack-item i {
+        font-size: 1.5rem;
+      }
+      .stack-item span {
+        font-size: 0.9rem;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .footer-brand p {
+        max-width: 100%;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer-bottom-links {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .footer-stack {
+        flex-direction: column;
+        align-items: center;
+      }
+      .stack-item {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* 404 links (all footer links go to 404) */
+    a {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- dummy content to show footer at bottom -->
+  <div class="content">
+    <h1>Stackly <span>social</span></h1>
+  </div>
+
+  <!-- FOOTER SECTION -->
+  <footer class="footer">
+    <div class="footer-container">
+
+      <!-- STACKED SOCIAL PATTERN (animated) -->
+      <div class="footer-stack">
+        <div class="stack-item">
+          <i class="fab fa-instagram"></i>
+          <span>@stackly_official</span>
+        </div>
+        <div class="stack-item">
+          <i class="fab fa-tiktok"></i>
+          <span>@stackly.reels</span>
+        </div>
+        <div class="stack-item">
+          <i class="fab fa-youtube"></i>
+          <span>Stackly tv</span>
+        </div>
+        <div class="stack-item">
+          <i class="fab fa-x-twitter"></i>
+          <span>@stackly</span>
+        </div>
+      </div>
+
+      <!-- MAIN FOOTER GRID -->
+      <div class="footer-grid">
+        <!-- brand column -->
+        <div class="footer-brand">
+          <div class="logo">
+            <i class="fas fa-camera-retro"></i>
+            <h2>Stac<span>kly</span></h2>
+          </div>
+          <p>The orange social network for creators. Share reels, connect globally, and grow your community.</p>
+          <div class="social-links">
+            <a href="404.html"><i class="fab fa-instagram"></i></a>
+            <a href="404.html"><i class="fab fa-tiktok"></i></a>
+            <a href="404.html"><i class="fab fa-youtube"></i></a>
+            
+          </div>
+        </div>
+
+        <!-- quick links -->
+        <div class="footer-col">
+          <h3>Quick links</h3>
+          <ul>
+            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+            <li><a href="account.html"><i class="fas fa-chevron-right"></i> Accounts</a></li>
+            <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+            <li><a href="chat.html"><i class="fas fa-chevron-right"></i> Chats</a></li>
+            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About</a></li>
+          </ul>
+        </div>
+
+        <!-- support -->
+        <div class="footer-col">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="404.html"><i class="fas fa-chevron-right"></i> Help center</a></li>
+            <li><a href="404.html"><i class="fas fa-chevron-right"></i> Safety</a></li>
+            <li><a href="404.html"><i class="fas fa-chevron-right"></i> Community</a></li>
+            <li><a href="404.html"><i class="fas fa-chevron-right"></i> Privacy</a></li>
+            <li><a href="404.html"><i class="fas fa-chevron-right"></i> Terms</a></li>
+          </ul>
+        </div>
+
+        <!-- newsletter with proper spacing - no overlap -->
+<div class="footer-col newsletter">
+  <h3>Stay updated</h3>
+  <p>Subscribe for the latest news and orange updates.</p>
+  <div class="newsletter-form">
+    <form onsubmit="event.preventDefault(); if(this.email.value.trim() !== '') { window.location.href='404.html'; } else { alert('Please enter your email'); }" style="display: flex; flex-direction: column; gap: 12px;">
+      <input type="email" name="email" placeholder="your email" required style="padding: 12px 16px; border-radius: 30px; border: 1px solid #ccc; width: 100%;">
+      <button type="submit" style="padding: 12px 16px; border-radius: 30px; background: #ff7a00; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-paper-plane"></i> subscribe</button>
+    </form>
+  </div>
+</div>
+        </div>
+      </div>
+
+      <!-- footer bottom -->
+      <div class="footer-bottom">
+        <div class="copyright">
+          © 2026 STACKLY. All rights reserved. Orange is our color.
+        </div>
+        <div class="footer-bottom-links">
+          <a href="404.html">Privacy</a>
+          <a href="404.html">Terms</a>
+          <a href="404.html">Cookies</a>
+          <a href="404.html">Ads</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+</body>
+</html>
